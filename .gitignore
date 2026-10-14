@@ -1,1 +1,73 @@
-c
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Git backup files
+*.bundle
+.git-empty-backup/
+
+# Build outputs
+dist/
+build/
+coverage/
+
+# React Native / Metro
+.metro-health-check*
+.metro/
+*.hbc
+
+# Android
+**/android/.gradle/
+**/android/build/
+**/android/app/build/
+**/android/local.properties
+**/android/.cxx/
+**/android/captures/
+**/android/.externalNativeBuild/
+
+# iOS / Xcode
+**/ios/Pods/
+**/ios/build/
+**/ios/DerivedData/
+**/ios/*.xcworkspace/xcuserdata/
+**/ios/*.xcodeproj/xcuserdata/
+**/ios/*.xcuserstate
+
+# CocoaPods
+**/ios/Podfile.lock
+
+# IDE and editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python (face recognition service)
+**/__pycache__/
+*.py[cod]
+.venv/
+venv/
+.envrc
+
+# Temporary files
+tmp/
+temp/
