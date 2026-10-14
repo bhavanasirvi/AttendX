@@ -12,4 +12,5 @@ export const env = {
   MONGO_URI: required("MONGO_URI"),
   JWT_SECRET: required("JWT_SECRET"),
   FACE_SERVICE_URL: required("FACE_SERVICE_URL"),
-};
+  FACE_MOCK: process.env.FACE_MOCK === "true",
+};  

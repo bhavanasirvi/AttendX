@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes";
+import staffRoutes from "./routes/staff.routes";
+import attendanceRoutes from "./routes/attendance.routes";
+
 
 const app = express();
 
@@ -13,7 +16,7 @@ app.get("/health", (_req, res) => {
 
 // routes yahan mount honge (aage add karenge)
 app.use("/api/auth", authRoutes);
-// app.use("/api/staff", staffRoutes);
-// app.use("/api/attendance", attendanceRoutes);
+app.use("/api/staff", staffRoutes);
+app.use("/api/attendance", attendanceRoutes);
 
 export default app;
