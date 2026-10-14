@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+python-multipart
+opencv-python>=4.8
+numpy
+mediapipe
+python-dotenv
+av
+requests
