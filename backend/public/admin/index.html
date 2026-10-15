@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#07152d" />
+  <title>AttendX Admin</title>
+  <style>
+    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#eef4ff;background:#07152d;font-synthesis:none}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 8% 0%,#12366a 0,transparent 34%),#07152d}button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}.shell{width:min(1160px,calc(100% - 40px));margin:auto}.login-wrap{min-height:100vh;display:grid;place-items:center;padding:24px}.login-card,.panel{background:#0c1e3d;border:1px solid #1e3b69;border-radius:20px;box-shadow:0 24px 80px #02091466}.login-card{width:min(430px,100%);padding:36px}.brand{display:flex;align-items:center;gap:13px;margin-bottom:34px}.brand-mark{width:44px;height:44px;border-radius:14px;background:#126be7;display:grid;place-items:center;font-weight:900;font-size:23px}.brand-title{font-size:20px;font-weight:800}.brand-sub{color:#91a8cf;font-size:13px;margin-top:3px}.eyebrow{color:#29c4e8;text-transform:uppercase;letter-spacing:.14em;font-size:11px;font-weight:800}.login-card h1{font-size:28px;margin:8px 0}.muted{color:#9eb0ce}.field{display:grid;gap:8px;margin:18px 0}.field label{font-size:13px;font-weight:700;color:#d8e3f5}.field input{width:100%;background:#071833;color:white;border:1px solid #294673;border-radius:11px;padding:13px 14px;outline:none}.field input:focus{border-color:#28bde4;box-shadow:0 0 0 3px #28bde422}.primary,.secondary,.danger{border:0;border-radius:10px;padding:11px 15px;font-weight:800}.primary{background:#2470ed;color:white}.primary:hover{background:#3982ff}.secondary{background:#142b50;color:#dbe8ff;border:1px solid #294673}.danger{background:#4a2036;color:#ff9fbd;border:1px solid #69304c}.login-submit{width:100%;margin-top:12px;padding:14px}.error,.success{font-size:13px;margin-top:13px}.error{color:#ff789c}.success{color:#42d9bd}.app{padding:28px 0 56px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:8px 0 28px}.topbar .brand{margin:0}.admin-info{display:flex;align-items:center;gap:14px}.admin-name{color:#c3d2eb;font-size:14px}.heading{margin-bottom:22px}.heading h1{font-size:30px;margin:6px 0}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}.stat{padding:19px 21px}.stat-label{color:#9eb0ce;font-size:13px}.stat-value{font-size:28px;font-weight:900;margin-top:6px}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid #1e3b69}.search{max-width:310px;background:#071833;color:#fff;border:1px solid #294673;border-radius:10px;padding:11px 13px;outline:none}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:650px}th,td{text-align:left;padding:15px 20px;border-bottom:1px solid #192f51;font-size:14px}th{color:#91a8cf;font-size:11px;text-transform:uppercase;letter-spacing:.08em}td{color:#e4edfa}.badge{display:inline-block;border-radius:99px;padding:5px 9px;background:#103b43;color:#51ddc1;font-size:11px;font-weight:800}.badge.pending{background:#422d19;color:#ffc66f}.actions{display:flex;gap:8px}.small{padding:7px 10px;font-size:12px}.empty{padding:36px;text-align:center;color:#91a8cf}.toast{position:fixed;right:22px;bottom:22px;max-width:min(420px,calc(100vw - 44px));padding:14px 18px;border-radius:12px;background:#163b43;border:1px solid #267d78;color:#cbfff0;box-shadow:0 12px 40px #0005}.toast.bad{background:#472039;border-color:#803454;color:#ffd9e3}.modal-backdrop{position:fixed;inset:0;background:#020916bb;display:grid;place-items:center;padding:20px;z-index:5}.modal{width:min(500px,100%);max-height:90vh;overflow:auto;padding:24px}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal-head h2{margin:0 0 8px}.close{border:0;background:transparent;color:#a9bddb;font-size:24px}.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:24px}.help{font-size:12px;color:#91a8cf;margin-top:-10px}.loading{opacity:.6;pointer-events:none}@media(max-width:640px){.shell{width:min(100% - 24px,1160px)}.login-card{padding:26px}.app{padding-top:16px}.topbar{align-items:flex-start}.admin-info{flex-direction:column;align-items:flex-end;gap:7px}.heading h1{font-size:25px}.stats{grid-template-columns:1fr;gap:10px}.stat{padding:14px 17px}.toolbar{align-items:stretch;flex-direction:column}.search{max-width:none;width:100%}}
+    .brand-mark{position:relative;overflow:hidden;animation:brand-glow 3s ease-in-out infinite}.brand-mark svg{width:100%;height:100%;display:block}.login-card{animation:card-enter .65s cubic-bezier(.2,.8,.2,1) both}.primary,.secondary,.danger{transition:transform .16s ease,filter .16s ease,box-shadow .16s ease}.primary:hover,.secondary:hover,.danger:hover{transform:translateY(-2px);filter:brightness(1.12);box-shadow:0 8px 24px #02091466}.primary:active,.secondary:active,.danger:active{transform:scale(.97)}body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.1;background-image:radial-gradient(circle,#31c7ed 1.5px,transparent 2px),linear-gradient(28deg,transparent 49.8%,#31c7ed 50%,transparent 50.2%),linear-gradient(151deg,transparent 49.8%,#2869ee 50%,transparent 50.2%);background-size:92px 92px,160px 160px,210px 210px;background-position:12px 18px,20px 0,72px 40px;animation:network-pulse 6s ease-in-out infinite;z-index:-1}@keyframes card-enter{from{opacity:0;transform:translateY(-18px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes brand-glow{50%{box-shadow:0 0 22px #20c8ed88}}@keyframes network-pulse{50%{opacity:.18}}
+    .logo-preview{width:56px;height:56px;object-fit:contain;border-radius:12px;background:#07152d;border:1px solid #1e3b69;padding:4px}
+  </style>
+</head>
+<body>
+  <section id="loginView" class="login-wrap">
+    <form id="loginForm" class="login-card">
+      <div class="brand"><div class="brand-mark"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 19V10h9M29 10h9v9M38 29v9h-9M19 38h-9v-9" fill="none" stroke="#38d8ed" stroke-width="2.5" stroke-linecap="round"/><path d="M12 27c0-6 3-11 7-11s7 5 7 11v3H12zm10-3c0-6 3-11 7-11s7 5 7 11v3h-9" fill="#17c9e4" opacity=".8"/><path d="m14 18 20 20M34 18 14 38" stroke="#2871f3" stroke-width="5" stroke-linecap="round"/><path d="m17 25 5 5 10-12" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="brand-title">AttendX</div><div class="brand-sub">Institutional attendance</div></div></div>
+      <div class="eyebrow">Administrator access</div><h1>Sign in</h1><p class="muted">Manage staff accounts securely.</p>
+      <div class="field"><label for="loginId">Admin ID</label><input id="loginId" name="empId" autocomplete="username" required /></div>
+      <div class="field"><label for="loginPassword">Password</label><input id="loginPassword" name="password" type="password" autocomplete="current-password" required /></div>
+      <button id="loginButton" class="primary login-submit">Sign in to admin</button>
+      <div id="loginError" class="error" role="alert"></div>
+    </form>
+  </section>
+
+  <main id="appView" class="shell app hidden">
+    <header class="topbar">
+      <div class="brand"><div class="brand-mark"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 19V10h9M29 10h9v9M38 29v9h-9M19 38h-9v-9" fill="none" stroke="#38d8ed" stroke-width="2.5" stroke-linecap="round"/><path d="M12 27c0-6 3-11 7-11s7 5 7 11v3H12zm10-3c0-6 3-11 7-11s7 5 7 11v3h-9" fill="#17c9e4" opacity=".8"/><path d="m14 18 20 20M34 18 14 38" stroke="#2871f3" stroke-width="5" stroke-linecap="round"/><path d="m17 25 5 5 10-12" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="brand-title">AttendX Admin</div><div class="brand-sub">Employee management</div></div></div>
+      <div class="admin-info"><span id="adminName" class="admin-name"></span><button id="logoutButton" class="secondary">Sign out</button></div>
+    </header>
+    <section class="heading"><div class="eyebrow">Administration</div><h1>Employees</h1><div class="muted">Create and manage staff access to AttendX.</div></section>
+    <section class="panel" style="padding:20px;margin-bottom:16px">
+      <form id="settingsForm" style="display:flex;align-items:end;gap:14px;flex-wrap:wrap">
+        <div style="flex:1;min-width:220px"><div class="eyebrow">Attendance verification</div><div style="font-weight:800;margin:6px 0 10px">Campus Wi-Fi SSID</div><input id="allowedSSID" class="search" style="max-width:none;width:100%" maxlength="32" required placeholder="Enter the exact Wi-Fi name" /></div>
+        <button id="saveSettings" class="primary">Save Wi-Fi</button>
+      </form>
+      <form id="logoForm" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-top:1px solid #1e3b69;margin-top:18px;padding-top:18px">
+        <img id="logoPreview" alt="Current AttendX logo" class="logo-preview hidden" />
+        <div style="flex:1;min-width:220px"><div class="eyebrow">App branding</div><div style="font-weight:800;margin:6px 0 10px">Upload the AttendX logo</div><input id="logoFile" type="file" accept="image/png,image/jpeg,image/webp" required /></div>
+        <button id="uploadLogo" class="primary" type="submit">Upload logo</button>
+      </form>
+      <div id="settingsError" class="error" role="alert"></div>
+    </section>
+    <section class="stats">
+      <div class="panel stat"><div class="stat-label">Total employees</div><div id="totalCount" class="stat-value">0</div></div>
+      <div class="panel stat"><div class="stat-label">Face enrolled</div><div id="faceCount" class="stat-value">0</div></div>
+      <div class="panel stat"><div class="stat-label">Access</div><div class="stat-value" style="font-size:20px;color:#42d9bd">Admin protected</div></div>
+    </section>
+    <section class="panel">
+      <div class="toolbar"><input id="search" class="search" placeholder="Search name or employee ID" /><button id="addButton" class="primary">+ Add employee</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Employee</th><th>Employee ID</th><th>Face enrollment</th><th>Added</th><th>Actions</th></tr></thead><tbody id="employeeRows"></tbody></table><div id="emptyState" class="empty hidden">No employees found.</div></div>
+    </section>
+    <div id="pageError" class="error" role="alert"></div>
+  </main>
+
+  <div id="modalBackdrop" class="modal-backdrop hidden">
+    <form id="employeeForm" class="panel modal">
+      <div class="modal-head"><div><div class="eyebrow">Staff account</div><h2 id="modalTitle">Add employee</h2></div><button type="button" id="closeModal" class="close" aria-label="Close">×</button></div>
+      <div class="field"><label for="employeeName">Full name</label><input id="employeeName" name="name" required maxlength="100" /></div>
+      <div class="field"><label for="employeeId">Employee ID</label><input id="employeeId" name="empId" required maxlength="50" autocomplete="off" /></div>
+      <div class="field"><label for="employeePassword">Password <span id="passwordHint" class="muted"></span></label><input id="employeePassword" name="password" type="password" minlength="6" autocomplete="new-password" /></div>
+      <div class="field"><label for="employeeFace">Face photo <span class="muted">(optional)</span></label><input id="employeeFace" name="face" type="file" accept="image/*" /></div>
+      <div class="help">Password must be at least 6 characters. Leave it blank while editing to keep the current password. Employees need a face photo enrolled before face attendance verification.</div>
+      <div id="formError" class="error" role="alert"></div>
+      <div class="modal-actions"><button type="button" id="cancelButton" class="secondary">Cancel</button><button id="saveButton" class="primary">Create employee</button></div>
+    </form>
+  </div>
+  <div id="toast" class="toast hidden" role="status"></div>
+
+  <script>
+    (() => {
+      const apiRoot = `${window.location.origin}/api`;
+      const $ = (id) => document.getElementById(id);
+      let token = sessionStorage.getItem("attendx.admin.token") || "";
+      let admin = null;
+      let employees = [];
+      let editingId = null;
+      let toastTimer;
+
+      async function request(path, options = {}) {
+        const headers = { ...(options.headers || {}) };
+        if (token) headers.Authorization = `Bearer ${token}`;
+        if (options.body && !(options.body instanceof FormData)) headers["Content-Type"] = "application/json";
+        const response = await fetch(`${apiRoot}${path}`, { ...options, headers });
+        const data = await response.json().catch(() => ({}));
+        if (response.status === 401) signOut();
+        if (!response.ok) throw new Error(data.message || `Request failed (${response.status})`);
+        return data;
+      }
+
+      function showToast(message, bad = false) {
+        const toast = $("toast");
+        toast.textContent = message;
+        toast.classList.toggle("bad", bad);
+        toast.classList.remove("hidden");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.add("hidden"), 3200);
+      }
+
+      function signOut() {
+        token = "";
+        admin = null;
+        sessionStorage.removeItem("attendx.admin.token");
+        sessionStorage.removeItem("attendx.admin.user");
+        $("appView").classList.add("hidden");
+        $("loginView").classList.remove("hidden");
+        $("loginPassword").value = "";
+      }
+
+      function setLoggedIn(user) {
+        admin = user;
+        $("adminName").textContent = `${user.name} · ${user.empId}`;
+        $("loginView").classList.add("hidden");
+        $("appView").classList.remove("hidden");
+      }
+
+      async function loadEmployees() {
+        $("pageError").textContent = "";
+        try {
+          employees = await request("/staff");
+          renderEmployees();
+        } catch (error) {
+          $("pageError").textContent = error.message;
+        }
+      }
+
+      async function loadSettings() {
+        try {
+          const settings = await request("/admin/settings");
+          $("allowedSSID").value = settings.allowedSSID || "";
+          const branding = await request("/admin/branding");
+          if (branding.logoUrl) {
+            $("logoPreview").src = branding.logoUrl;
+            $("logoPreview").classList.remove("hidden");
+          }
+        } catch (error) {
+          $("settingsError").textContent = error.message;
+        }
+      }
+
+      function renderEmployees() {
+        const query = $("search").value.trim().toLowerCase();
+        const shown = employees.filter((employee) => `${employee.name} ${employee.empId}`.toLowerCase().includes(query));
+        $("totalCount").textContent = employees.length;
+        $("faceCount").textContent = employees.filter((employee) => employee.hasFace).length;
+        const body = $("employeeRows");
+        body.replaceChildren();
+        $("emptyState").classList.toggle("hidden", shown.length > 0);
+        for (const employee of shown) {
+          const row = document.createElement("tr");
+          const name = document.createElement("td");
+          name.textContent = employee.name;
+          const id = document.createElement("td");
+          id.textContent = employee.empId;
+          const face = document.createElement("td");
+          const badge = document.createElement("span");
+          badge.className = employee.hasFace ? "badge" : "badge pending";
+          badge.textContent = employee.hasFace ? "Enrolled" : "Pending";
+          face.append(badge);
+          const added = document.createElement("td");
+          added.textContent = employee.createdAt ? new Date(employee.createdAt).toLocaleDateString() : "—";
+          const actions = document.createElement("td");
+          const group = document.createElement("div");
+          group.className = "actions";
+          const edit = document.createElement("button");
+          edit.className = "secondary small";
+          edit.textContent = "Edit";
+          edit.addEventListener("click", () => openEditor(employee));
+          const remove = document.createElement("button");
+          remove.className = "danger small";
+          remove.textContent = "Delete";
+          remove.addEventListener("click", () => removeEmployee(employee));
+          group.append(edit, remove);
+          actions.append(group);
+          row.append(name, id, face, added, actions);
+          body.append(row);
+        }
+      }
+
+      function openEditor(employee = null) {
+        editingId = employee?.id || null;
+        $("employeeForm").reset();
+        $("formError").textContent = "";
+        $("modalTitle").textContent = editingId ? "Edit employee" : "Add employee";
+        $("saveButton").textContent = editingId ? "Save changes" : "Create employee";
+        $("passwordHint").textContent = editingId ? "(optional reset)" : "(required)";
+        $("employeePassword").required = !editingId;
+        if (employee) {
+          $("employeeName").value = employee.name;
+          $("employeeId").value = employee.empId;
+        }
+        $("modalBackdrop").classList.remove("hidden");
+        $("employeeName").focus();
+      }
+
+      function closeEditor() {
+        $("modalBackdrop").classList.add("hidden");
+        editingId = null;
+      }
+
+      async function removeEmployee(employee) {
+        if (!window.confirm(`Delete ${employee.name} (${employee.empId})? This cannot be undone.`)) return;
+        try {
+          await request(`/staff/${encodeURIComponent(employee.id)}`, { method: "DELETE" });
+          showToast("Employee deleted");
+          await loadEmployees();
+        } catch (error) {
+          showToast(error.message, true);
+        }
+      }
+
+      $("loginForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const button = $("loginButton");
+        button.disabled = true;
+        $("loginError").textContent = "";
+        try {
+          const data = await request("/auth/login", { method: "POST", body: JSON.stringify({ empId: $("loginId").value.trim(), password: $("loginPassword").value }) });
+          if (data.user?.role !== "admin") throw new Error("This account is not an administrator.");
+          token = data.token;
+          sessionStorage.setItem("attendx.admin.token", token);
+          sessionStorage.setItem("attendx.admin.user", JSON.stringify(data.user));
+          setLoggedIn(data.user);
+          await Promise.all([loadEmployees(), loadSettings()]);
+        } catch (error) {
+          $("loginError").textContent = error.message;
+        } finally {
+          button.disabled = false;
+        }
+      });
+
+      $("employeeForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const button = $("saveButton");
+        button.disabled = true;
+        $("formError").textContent = "";
+        const data = new FormData();
+        data.append("name", $("employeeName").value.trim());
+        data.append("empId", $("employeeId").value.trim());
+        if ($("employeePassword").value) data.append("password", $("employeePassword").value);
+        if ($("employeeFace").files[0]) data.append("face", $("employeeFace").files[0]);
+        try {
+          await request(editingId ? `/staff/${encodeURIComponent(editingId)}` : "/staff", {
+            method: editingId ? "PATCH" : "POST",
+            body: data,
+          });
+          closeEditor();
+          showToast(editingId ? "Employee updated" : "Employee created");
+          await loadEmployees();
+        } catch (error) {
+          $("formError").textContent = error.message;
+        } finally {
+          button.disabled = false;
+        }
+      });
+
+      $("settingsForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const button = $("saveSettings");
+        button.disabled = true;
+        $("settingsError").textContent = "";
+        try {
+          const result = await request("/admin/settings", {
+            method: "PATCH",
+            body: JSON.stringify({ allowedSSID: $("allowedSSID").value.trim() }),
+          });
+          showToast(`${result.allowedSSID} is now required for staff verification`);
+        } catch (error) {
+          $("settingsError").textContent = error.message;
+        } finally {
+          button.disabled = false;
+        }
+      });
+
+      $("logoForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const file = $("logoFile").files[0];
+        if (!file) return;
+        const button = $("uploadLogo");
+        button.disabled = true;
+        const form = new FormData();
+        form.append("logo", file);
+        try {
+          const result = await request("/admin/logo", { method: "POST", body: form });
+          $("logoPreview").src = result.logoUrl;
+          $("logoPreview").classList.remove("hidden");
+          $("logoFile").value = "";
+          showToast("AttendX logo updated in the mobile app");
+        } catch (error) {
+          $("settingsError").textContent = error.message;
+        } finally {
+          button.disabled = false;
+        }
+      });
+
+      $("addButton").addEventListener("click", () => openEditor());
+      $("logoutButton").addEventListener("click", signOut);
+      $("closeModal").addEventListener("click", closeEditor);
+      $("cancelButton").addEventListener("click", closeEditor);
+      $("modalBackdrop").addEventListener("click", (event) => { if (event.target === $("modalBackdrop")) closeEditor(); });
+      $("search").addEventListener("input", renderEmployees);
+
+      if (token) {
+        try {
+          const savedUser = JSON.parse(sessionStorage.getItem("attendx.admin.user") || "null");
+          if (savedUser?.role === "admin") {
+            setLoggedIn(savedUser);
+            loadEmployees();
+            loadSettings();
+          } else signOut();
+        } catch { signOut(); }
+      }
+    })();
+  </script>
+</body>
+</html>

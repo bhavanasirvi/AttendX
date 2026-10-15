@@ -1,9 +1,11 @@
 export const campus = {
-  // college ke center ki coordinates (Google Maps pe right click karke copy kar)
-  latitude: 26.9124,
-  longitude: 75.7873,
+  name: "SKIT Jaipur",
+  // SKIT Jaipur coordinates from the institute's official Google Maps link.
+  latitude: 26.8230484,
+  longitude: 75.866787,
   radiusMeters: 300,
+  maxGpsAccuracyMeters: 50,
 
   // campus Wi-Fi ka naam (aur ho sake toh BSSID bhi)
-  allowedSSIDs: ["SKIT_Tech"],
-};
+  allowedSSIDs: ["Lakshya's Galaxy M04"],
+}

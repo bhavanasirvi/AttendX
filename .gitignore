@@ -1,6 +1,10 @@
 # Dependencies
 node_modules/
 **/node_modules/
+face-service/.venv/
+face-service/models/
+face-service/__pycache__/
+face-service/.env
 
 # Environment variables and secrets
 .env

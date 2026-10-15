@@ -15,5 +15,7 @@ export const distanceMeters = (lat1: number, lon1: number, lat2: number, lon2: n
 export const isInsideCampus = (lat: number, lon: number) =>
   distanceMeters(lat, lon, campus.latitude, campus.longitude) <= campus.radiusMeters;
 
-export const isCampusWifi = (ssid?: string) =>
-  !!ssid && campus.allowedSSIDs.includes(ssid);
+export const isCampusWifi = (ssid?: string, allowedSSIDs = campus.allowedSSIDs) => {
+  const normalizedSSID = ssid?.trim().replace(/^\"|\"$/g, "");
+  return !!normalizedSSID && allowedSSIDs.includes(normalizedSSID);
+};

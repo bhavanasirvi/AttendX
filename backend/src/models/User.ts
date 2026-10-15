@@ -6,6 +6,8 @@ export interface IUser {
   password: string;
   role: "admin" | "staff";
   faceImagePath?: string; // enrolled face ki photo ka path
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const userSchema = new Schema<IUser>(

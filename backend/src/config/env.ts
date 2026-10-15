@@ -7,10 +7,17 @@ const required = (key: string): string => {
   return value;
 };
 
+const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
+const faceMock = process.env.FACE_MOCK === "true";
+const faceServiceUrl = process.env.FACE_SERVICE_URL;
+
+if (!mongoUri) throw new Error("Missing env variable: MONGO_URI or MONGODB_URI");
+if (!faceMock && !faceServiceUrl) throw new Error("Missing env variable: FACE_SERVICE_URL");
+
 export const env = {
   PORT: Number(process.env.PORT) || 5000,
-  MONGO_URI: required("MONGO_URI"),
+  MONGO_URI: mongoUri,
   JWT_SECRET: required("JWT_SECRET"),
-  FACE_SERVICE_URL: required("FACE_SERVICE_URL"),
-  FACE_MOCK: process.env.FACE_MOCK === "true",
-};  
+  FACE_SERVICE_URL: faceServiceUrl || "",
+  FACE_MOCK: faceMock,
+};
