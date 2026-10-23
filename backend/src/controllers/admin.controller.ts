@@ -17,9 +17,13 @@ export const getBranding = async (_req: AuthRequest, res: Response) => {
     const logoName = existing.find(Boolean);
     const protocol = String(_req.headers["x-forwarded-proto"] || _req.protocol).split(",")[0].trim();
     const base = `${protocol}://${_req.get("host")}`;
-    return res.json({ logoUrl: logoName ? `${base}/uploads/branding/${logoName}?v=${(await fs.stat(path.join(brandingDir, logoName))).mtimeMs}` : null });
+    const logoUrl = logoName
+      ? `${base}/uploads/branding/${logoName}?v=${(await fs.stat(path.join(brandingDir, logoName))).mtimeMs}`
+      : `${base}/admin/Attendex_Logo.jpeg`;
+    return res.json({ logoUrl });
   } catch {
-    return res.json({ logoUrl: null });
+    const protocol = String(_req.headers["x-forwarded-proto"] || _req.protocol).split(",")[0].trim();
+    return res.json({ logoUrl: `${protocol}://${_req.get("host")}/admin/Attendex_Logo.jpeg` });
   }
 };
 

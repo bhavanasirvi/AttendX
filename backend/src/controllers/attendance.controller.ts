@@ -1,5 +1,6 @@
 import { Response } from "express";
 import fs from "fs";
+import { randomUUID } from "crypto";
 import User from "../models/User";
 import Attendance from "../models/Attendance";
 import { AuthRequest } from "../middlewares/auth";
@@ -15,6 +16,31 @@ type Presence =
 type FaceCheck = { ok: false; status: number; message: string } | { ok: true; score: number };
 
 type AttendanceFiles = { selfie?: Express.Multer.File[]; blink?: Express.Multer.File[]; left?: Express.Multer.File[]; right?: Express.Multer.File[] };
+type AttendanceAction = "checkin" | "checkout";
+type FaceProof = { userId: string; score: number; expiresAt: number };
+type AttendanceProof = {
+  userId: string; action: AttendanceAction; date: string; lat: number; lon: number;
+  accuracyMeters: number; campusName: string; wifiSSID?: string; score: number; expiresAt: number;
+};
+
+// The final attendance tap uses this short-lived, one-use proof instead of uploading
+// and re-running the same liveness videos a second time.
+const faceProofs = new Map<string, FaceProof>();
+const attendanceProofs = new Map<string, AttendanceProof>();
+const purgeExpiredProofs = () => {
+  const now = Date.now();
+  for (const [key, proof] of faceProofs) if (proof.expiresAt <= now) faceProofs.delete(key);
+  for (const [key, proof] of attendanceProofs) if (proof.expiresAt <= now) attendanceProofs.delete(key);
+};
+
+const takeAttendanceProof = (req: AuthRequest, action: AttendanceAction): AttendanceProof | null => {
+  purgeExpiredProofs();
+  const ticket = typeof req.body?.verificationTicket === "string" ? req.body.verificationTicket : "";
+  const proof = attendanceProofs.get(ticket);
+  if (!proof || proof.userId !== String(req.user!.id) || proof.action !== action || proof.date !== todayIST()) return null;
+  attendanceProofs.delete(ticket);
+  return proof;
+};
 
 const getAttendanceFiles = (req: AuthRequest) =>
   (req.files as AttendanceFiles | undefined) ?? {};
@@ -104,7 +130,10 @@ export const verifyFaceOnly = async (req: AuthRequest, res: Response) => {
   try {
     const result = await verifyUploadedFace(req);
     if (!result.ok) return res.status(result.status).json({ message: result.message });
-    return res.json({ message: "Face recognition verified", faceVerified: true });
+    purgeExpiredProofs();
+    const faceProof = randomUUID();
+    faceProofs.set(faceProof, { userId: String(req.user!.id), score: result.score, expiresAt: Date.now() + 5 * 60 * 1000 });
+    return res.json({ message: "Face recognition verified", faceVerified: true, faceProof });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Face verification service failed. Please try again." });
@@ -115,7 +144,14 @@ export const verifyFaceOnly = async (req: AuthRequest, res: Response) => {
 
 export const verifyLocationOnly = async (req: AuthRequest, res: Response) => {
   try {
-    const { latitude, longitude, accuracy, wifiSSID, isMockLocation } = req.body;
+    const { latitude, longitude, accuracy, wifiSSID, isMockLocation, faceProof, action } = req.body;
+    const verifiedFace = typeof faceProof === "string" ? faceProofs.get(faceProof) : undefined;
+    if (!verifiedFace || verifiedFace.userId !== String(req.user!.id) || verifiedFace.expiresAt <= Date.now()) {
+      return res.status(403).json({ message: "Face verification expired. Please verify again." });
+    }
+    if (action !== "checkin" && action !== "checkout") {
+      return res.status(400).json({ message: "Attendance action is missing. Please verify again." });
+    }
     if (isMockLocation) return res.status(403).json({ message: "Fake/mock location detected" });
     const lat = Number(latitude);
     const lon = Number(longitude);
@@ -134,9 +170,17 @@ export const verifyLocationOnly = async (req: AuthRequest, res: Response) => {
     if (!isCampusWifi(wifiSSID, allowedSSIDs)) {
       return res.status(403).json({ message: `Please connect to Wi-Fi "${allowedSSIDs[0]}" and try again.` });
     }
+    faceProofs.delete(faceProof);
+    purgeExpiredProofs();
+    const verificationTicket = randomUUID();
+    attendanceProofs.set(verificationTicket, {
+      userId: String(req.user!.id), action, date: todayIST(), lat, lon, accuracyMeters,
+      campusName: campus.name, wifiSSID, score: verifiedFace.score, expiresAt: Date.now() + 2 * 60 * 1000,
+    });
     return res.json({
       message: "GPS location and Wi-Fi verified",
       location: { latitude: lat, longitude: lon, accuracyMeters, campusName: campus.name, wifiSSID },
+      verificationTicket,
     });
   } catch (err) {
     console.error(err);
@@ -156,7 +200,13 @@ export const markAttendance = async (req: AuthRequest, res: Response) => {
       return res.status(409).json({ message: "Check out before starting another attendance session" });
     }
 
-    const p = await verifyPresence(req);
+    const proof = req.body?.verificationTicket ? takeAttendanceProof(req, "checkin") : null;
+    if (req.body?.verificationTicket && !proof) {
+      return res.status(403).json({ message: "Verification expired or already used. Please verify again." });
+    }
+    const p = proof
+      ? { ok: true as const, lat: proof.lat, lon: proof.lon, accuracyMeters: proof.accuracyMeters, campusName: proof.campusName, wifiSSID: proof.wifiSSID, locationOk: true, wifiOk: true, score: proof.score }
+      : await verifyPresence(req);
     if (!p.ok) return res.status(p.status).json({ message: p.message });
 
     const record = await Attendance.create({
@@ -192,7 +242,13 @@ export const checkOut = async (req: AuthRequest, res: Response) => {
     }).sort({ markedAt: -1 });
     if (!record) return res.status(400).json({ message: "No active check-in to check out" });
 
-    const p = await verifyPresence(req);
+    const proof = req.body?.verificationTicket ? takeAttendanceProof(req, "checkout") : null;
+    if (req.body?.verificationTicket && !proof) {
+      return res.status(403).json({ message: "Verification expired or already used. Please verify again." });
+    }
+    const p = proof
+      ? { ok: true as const, lat: proof.lat, lon: proof.lon, accuracyMeters: proof.accuracyMeters, campusName: proof.campusName, wifiSSID: proof.wifiSSID, locationOk: true, wifiOk: true, score: proof.score }
+      : await verifyPresence(req);
     if (!p.ok) return res.status(p.status).json({ message: p.message });
 
     record.checkOutAt = new Date();
